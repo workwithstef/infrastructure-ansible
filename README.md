@@ -29,7 +29,7 @@ ANSIBLE CONTROLLER
 PASSWORD AUTHENTICATION
 
     [within agent server]
-    
+
 7. `$ cd /etc/ssh`
 8. `$ sudo nano sshd_config` - edit: 'PermitRootAccess yes', 'PasswordAuthentication' yes'
 9. `$ sudo passwd root` - set password
@@ -39,6 +39,7 @@ PASSWORD AUTHENTICATION
 SETTING UP KEYS
 
    [within ansible server]
+   
 11. `$ cd ~/.ssh`
 12. `$ ssh-keygen` - this will generate rsa key pair
 13. `$ ssh-copy-id root@{IP}` - sends key to specified IP
