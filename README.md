@@ -12,12 +12,12 @@ ANSIBLE CONTROLLER
   4. `$ sudo nano hosts`
   5. enter this:
 
-  [web]
+  `[web]
   192.168.10.10 ansible_connection=ssh ansible_ssh_user=vagrant ansible_ssh_pass=vagrant
   [db]
   192.168.10.20 ansible_connection=ssh ansible_ssh_user=vagrant ansible_ssh_pass=vagrant
   [aws]
-  192.168.10.30 ansible_connection=ssh ansible_ssh_user=vagrant ansible_ssh_pass=vagrant
+  192.168.10.30 ansible_connection=ssh ansible_ssh_user=vagrant ansible_ssh_pass=vagrant`
 
   This step tells the ansible controller which agent nodes to 'control';
 

@@ -58,6 +58,9 @@
       name: pm2
       global: yes
 
+  - name: Clone Repo
+    shell: git clone https://github.com/workwithstef/playbook-web-files.git /home/vagrant
+
 
 
   - name: Start app.js
