@@ -1,0 +1,77 @@
+# This is an example of ansible playbook written in YMAL
+
+# YAML FILE STARTS WITH THREE --- DASHES(---)
+---
+- hosts: web
+# host is to define the name of your host machine, group or all servers
+# in this example we are targeting server called web
+
+  gather_facts: yes
+# gethering facts before performing any tasks
+
+  become: true
+# become is used to get root permission to perform any tasks that may require admin access
+
+  tasks:
+#Tasks are executed in order, one at a time, against all Servers matched by the host pattern
+# Every task should have a name, which is included in the output from running the playbook
+# The goal of each task is to execute a module, with very specific arguments.
+
+  - name: Install nginx
+  # we are installing nginx on our web server
+
+    apt: pkg=nginx state=present
+    notify:
+    - restart nginx
+
+  - name: Enable nginx during boot
+    service: name=nginx  state=started enabled=yes
+    # handlers:
+    #     - name: restart nginx
+    #       service: name=nginx state=restarted
+
+  - name: Install git
+    apt: pkg=git state=present
+
+  - name: Install python
+    apt: pkg=python state=present
+
+  - name: Download Nodejs
+    shell: |
+      curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+
+  # - name: Download nodejs
+  #   get_url:
+  #     url: https://deb.nodesource.com/setup_10.x
+  #     dest: /bin
+
+  - name: Install nodejs
+    apt: pkg=nodejs state=present
+
+  # - name: Install NPM
+  #   shell: npm i
+  #   args:
+  #     chdir: /home/vagrant
+
+  - name: Install PM2
+    npm:
+      name: pm2
+      global: yes
+  handlers:
+          - name: restart nginx
+            service: name=nginx state=restarted
+
+  # Reverse proxy
+
+  - name: Remove existing default file
+    file:
+      path: /etc/nginx/sites-available/default
+      state: absent
+  
+  - name: Update sites-available with new default
+    copy:
+      src: /home/vagrant/environment/web/default.conf
+      dest: /etc/nginx/sites-available/default
+      owner: default
+      group: default
+      mode: '0644'
