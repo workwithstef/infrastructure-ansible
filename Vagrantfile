@@ -6,25 +6,6 @@ end
 
 Vagrant.configure("2") do |config|
 
-  config.vm.define "control" do |control|
-    # specifying the box
-    control.vm.box = "ubuntu/bionic64"
-
-    # assign IP
-    control.vm.network :private_network, ip: "192.168.10.40"
-
-    # assign host name for the vm
-    control.vm.hostname = "ansible"
-    # ansible.vm.synced_folder "environment", "/home/vagrant"
-    # assign host name for browser access
-    control.hostsupdater.aliases = ["development.ansible"]
-    control.vm.synced_folder "environment", "/home/vagrant/environment"
-    control.vm.synced_folder "playbook", "/home/vagrant/playbook"
-    control.vm.provision "shell", path: "environment/control/provision.sh"
-    control.vm.provision "ansible_local" do |ansible|
-      ansible.playbook = "playbook.yml"
-    end
-  end
 
   config.vm.define "web" do |web|
     # specifying the box
@@ -79,5 +60,24 @@ Vagrant.configure("2") do |config|
 
   end
 
+  config.vm.define "control" do |control|
+    # specifying the box
+    control.vm.box = "ubuntu/bionic64"
+
+    # assign IP
+    control.vm.network :private_network, ip: "192.168.10.40"
+
+    # assign host name for the vm
+    control.vm.hostname = "ansible"
+    # ansible.vm.synced_folder "environment", "/home/vagrant"
+    # assign host name for browser access
+    control.hostsupdater.aliases = ["development.ansible"]
+    control.vm.synced_folder "environment", "/home/vagrant/environment"
+    control.vm.synced_folder "playbook", "/home/vagrant/playbook"
+    control.vm.provision "shell", path: "environment/control/provision.sh"
+    control.vm.provision "ansible_local" do |ansible|
+      ansible.playbook = "playbook.yml"
+    end
+  end
 
 end

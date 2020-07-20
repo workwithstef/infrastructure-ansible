@@ -75,6 +75,7 @@ PASSWORD AUTHENTICATION
 5.  `$ cd /etc/ssh`
 6. `sudo nano sshd_config` - edit: 'PermitRootAccess yes', 'PasswordAuthentication' yes'
 7. set password using `$ sudo passwd root`
+`$ sudo service ssh restart`
 
 SETTING UP KEYS
 
@@ -101,7 +102,7 @@ SETTING UP KEYS
               service: name=nginx state=restarted`
 Good for secondary actions required after a task, i.e. `$service ssh restart`
 
- 
+
 
 -----------------
 ### BLOCKERS
