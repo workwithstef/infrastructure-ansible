@@ -57,32 +57,37 @@
     npm:
       name: pm2
       global: yes
-  handlers:
-          - name: restart nginx
-            service: name=nginx state=restarted
+
+
 
   - name: Start app.js
     shell: pm2 start app.js
     args:
       chdir: /home/vagrant/app
 
-  # # Reverse proxy
-  #
-  # - name: Remove existing default file
-  #   file:
-  #     path: /etc/nginx/sites-available/default
-  #     state: absent
-  #
-  # - name: Update sites-available with new default
-  #   copy:
-  #     src: /home/vagrant/environment/web/default.conf
-  #     dest: /etc/nginx/sites-available/default
-  #     owner: default
-  #     group: default
-  #     mode: '0644'
+  # Reverse proxy
+
+  - name: Remove existing default file
+    file:
+      path: /etc/nginx/sites-available/default
+      state: absent
+
+
+  - name: Update sites-available with new default
+    copy:
+      src: /home/vagrant/environment/web/default.conf
+      dest: /etc/nginx/sites-available/default
+      # owner: default
+      # group: default
+      # mode: '0644'
 
   - name: export DB_HOST
     shell: echo 'export DB_HOST=mongodb://192.168.10.20:27017/posts' >> ~/.bashrc
+    notify:
+    - restart nginx
+
+
+
   handlers:
-          - name: restart nginx
-            service: name=nginx state=restarted
+    - name: restart nginx
+      service: name=nginx state=restarted
