@@ -22,16 +22,16 @@ ANSIBLE CONTROLLER
 
   This step tells the ansible controller which agent nodes to 'control';
 
-6. `$ ansible all -m ping` - pings all servers
-    should get ping:pong as result
-    if not, try the following authentication method
+6. `$ ansible all -m ping` - pings all servers.
+    Should get ping:pong as result.
+    If not, try the following authentication method
 
 PASSWORD AUTHENTICATION
 
-    [within agent server]
+  [within agent server]
 
 7. `$ cd /etc/ssh`
-8. `$ sudo nano sshd_config` - edit: 'PermitRootAccess yes', 'PasswordAuthentication' yes'
+8. `$ sudo nano sshd_config` - edit: 'PermitRootAccess yes', 'PasswordAuthentication yes'
 9. `$ sudo passwd root` - set password
     (you won't see graphical input feedback)
 10. `$ sudo service ssh restart`
@@ -39,14 +39,14 @@ PASSWORD AUTHENTICATION
 SETTING UP KEYS
 
    [within ansible server]
-   
+
 11. `$ cd ~/.ssh`
 12. `$ ssh-keygen` - this will generate rsa key pair
 13. `$ ssh-copy-id root@{IP}` - sends key to specified IP
     (you will now enter the password set in step 9)
-14. Repeat step 13 for each agent node.
-15. `$ ansible all -m ping` - pings all servers
-  should now get ping:pong as result
+14. Repeat step 13 for each agent node IP.
+15. `$ ansible all -m ping` - pings all servers.
+  Should now get ping:pong as result
 
    `ssh root@{IP}` - to access agent server via ansible controller
 
