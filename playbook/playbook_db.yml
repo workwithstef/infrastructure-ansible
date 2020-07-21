@@ -8,38 +8,59 @@
   become: true
 
   tasks:
-    - name: MongoDB - Import public key
-      shell: wget -qO - https://www.mongodb.org/static/pgp/server-3.2.asc | sudo apt-key add -
+    # - name: MongoDB - Import public key
+    #   shell: wget -qO - https://www.mongodb.org/static/pgp/server-3.2.asc | sudo apt-key add -
+    #
+    # - name: MongoDB - Add repository
+    #   shell: echo "deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.2.list
+    #
+    # - name: update packages
+    #   shell: apt-get update -y
+    #
+    # - name: Install mongodb-org dependencies
+    #   shell: apt-get install -y mongodb-org=3.2.20 mongodb-org-server=3.2.20 mongodb-org-shell=3.2.20 mongodb-org-mongos=3.2.20 mongodb-org-tools=3.2.20
+    #     #--allow-change-held-packages
+    # - name: Text substitution fr mongod.conf
+    #   shell: sed -i "s,\\(^[[:blank:]]*bindIp:\\) .*,\\1 0.0.0.0," /etc/mongod.conf
+    #
+    # - name: Echo mongodb-org 1
+    #   shell: echo "mongodb-org hold" | sudo dpkg --set-selections
+    #
+    # - name: Echo mongodb-org 2
+    #   shell: echo "mongodb-org-server hold" | sudo dpkg --set-selections
+    #
+    # - name: Echo mongodb-org 3
+    #   shell: echo "mongodb-org-shell hold" | sudo dpkg --set-selections
+    #
+    # - name: Echo mongodb-org 4
+    #   shell: echo "mongodb-org-mongos hold" | sudo dpkg --set-selections
+    #
+    # - name: Echo mongodb-org 5
+    #   shell: echo "mongodb-org-tools hold" | sudo dpkg --set-selections
 
-    - name: MongoDB - Add repository
-      shell: echo "deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.2.list
+    - name: Import key
+      apt_key:
+        url: https://www.mongodb.org/static/pgp/server-3.2.asc
+        state: present
 
-    - name: update packages
-      shell: apt-get update -y
 
-    - name: Install mongodb-org dependencies
-      shell: apt-get install -y mongodb-org=3.2.20 mongodb-org-server=3.2.20 mongodb-org-shell=3.2.20 mongodb-org-mongos=3.2.20 mongodb-org-tools=3.2.20
-        #--allow-change-held-packages
+    - name: Add repository
+      apt_repository: repo="deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.2 multiverse" state=present
+
+
+    - name: Install MongoDB
+      apt: pkg=mongodb-org state=latest update_cache=yes
+      ignore_errors: yes
+
     - name: Text substitution fr mongod.conf
       shell: sed -i "s,\\(^[[:blank:]]*bindIp:\\) .*,\\1 0.0.0.0," /etc/mongod.conf
 
-    - name: Echo mongodb-org 1
-      shell: echo "mongodb-org hold" | sudo dpkg --set-selections
-
-    - name: Echo mongodb-org 2
-      shell: echo "mongodb-org-server hold" | sudo dpkg --set-selections
-
-    - name: Echo mongodb-org 3
-      shell: echo "mongodb-org-shell hold" | sudo dpkg --set-selections
-
-    - name: Echo mongodb-org 4
-      shell: echo "mongodb-org-mongos hold" | sudo dpkg --set-selections
-
-    - name: Echo mongodb-org 5
-      shell: echo "mongodb-org-tools hold" | sudo dpkg --set-selections
-
     - name: MongoDB - Running state
-      shell: systemctl start mongod
+      service:
+        name: mongod
+        state: started
 
     - name: MongoDB - Enable
-      shell: systemctl enable mongod
+      service:
+        name: mongod
+        enabled: yes
