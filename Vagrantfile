@@ -20,7 +20,7 @@ Vagrant.configure("2") do |config|
     # assign host name for browser access
     web.hostsupdater.aliases = ["development.local"]
     web.vm.synced_folder "environment", "/home/vagrant/environment"
-    web.vm.synced_folder "app", "/home/vagrant/app"
+    # web.vm.synced_folder "app", "/home/vagrant/app"
     web.vm.provision "shell", path: "environment/web/provision.sh"
 
 
