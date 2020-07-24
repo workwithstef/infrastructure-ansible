@@ -74,6 +74,7 @@ Vagrant.configure("2") do |config|
     control.hostsupdater.aliases = ["development.ansible"]
     control.vm.synced_folder "environment", "/home/vagrant/environment"
     control.vm.synced_folder "playbook", "/home/vagrant/playbook"
+    control.vm.synced_folder "app", "/home/vagrant/app"
     control.vm.provision "shell", path: "environment/control/provision.sh"
     control.vm.provision "ansible_local" do |ansible|
       ansible.playbook = "playbook.yml"

@@ -102,6 +102,41 @@ SETTING UP KEYS
               service: name=nginx state=restarted`
 Good for secondary actions required after a task, i.e. `$service ssh restart`
 
+### AMI
+
+- a 'snapshot' of your server.
+- creates a template of your server and its associated code/data at a given time
+- used on IMMUTABLE INFRASTRUCTURE so that you have backups of 'true' servers
+EXAMPLE (conceptual):
+In the case of a monolith system, with an App & DB, if the app server goes down, you can easily replace it with an AMI of the server before it crashed
+
+### EC2 instance & provisioning --playbook style
+
+- `sudo apt install python-pip` install python-pip
+- `pip install boto boto3` install boto/boto3
+- `ssh-keygen -t rsa -b 4096 -f ~/.ssh/{unique_key_name}` create ssh keys to login to AWS
+-  create ansible-vault and put AWS credentials inside
+- input variables in playbook [key_name, region, image, id]
+    key_name: ssh key name
+    region: the region you're working
+    image: get initial ami-xxxxx from AWS (Launch instance --> AMI image )
+- 1st provision task - Imports keys
+  edit key_material var to match ssh key path
+- 2nd provision task - create security group
+- 3rd provision task - create instance
+- edit instance_tags: to name your instance
+
+- ssh into ec2 instance
+- check sshd_config; PermitRootAccess yes, PasswordAuthentication yes
+- create new passwd `sudo passwd root`
+- sudo service sshd restart
+
+- go back into controller; change hosts file to control aws_ec2 host machine
+- change ansible_ssh_user=root
+- create new playbook to provision ec2 instance for app
+- make sure playbook hosts: matches with hosts config
+- check commands to match new paths/directories
+- run playbook
 
 
 -----------------
