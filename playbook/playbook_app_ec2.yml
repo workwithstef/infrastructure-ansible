@@ -51,6 +51,7 @@
     shell:
       cmd: . ~root/.bashrc && forever start app.js
       chdir: /home/ubuntu/app
+    ignore_errors: yes
   - name: node seeds -shell
     shell:
       cmd: . ~root/.bashrc && node seed.js

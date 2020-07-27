@@ -115,7 +115,11 @@ In the case of a monolith system, with an App & DB, if the app server goes down,
 - `sudo apt install python-pip` install python-pip
 - `pip install boto boto3` install boto/boto3
 - `ssh-keygen -t rsa -b 4096 -f ~/.ssh/{unique_key_name}` create ssh keys to login to AWS
--  create ansible-vault and put AWS credentials inside
+- `ansible-vault create group_vars/all/pass.yml` create ansible-vault (within same directory as playbook)
+- `ansible-vault edit group_vars/all/pass.yml` and put AWS credentials inside (BEWARE VIM)
+
+ALL `ansible` commands must now be followed by `--ask-vault-pass`
+
 - input variables in playbook [key_name, region, image, id]
     key_name: ssh key name
     region: the region you're working
@@ -125,8 +129,10 @@ In the case of a monolith system, with an App & DB, if the app server goes down,
 - 2nd provision task - create security group
 - 3rd provision task - create instance
 - edit instance_tags: to name your instance
+- `ansible-playbook playbook_ec2.yml --ask-vault-pass --tags create_ec2
+` run playbook (creates instance)
 
-- ssh into ec2 instance
+- `ssh -i ~/.ssh/{key_name} ubuntu@{public_ip}` ssh into ec2 instance
 - check sshd_config; PermitRootAccess yes, PasswordAuthentication yes
 - create new passwd `sudo passwd root`
 - sudo service sshd restart
@@ -136,7 +142,7 @@ In the case of a monolith system, with an App & DB, if the app server goes down,
 - create new playbook to provision ec2 instance for app
 - make sure playbook hosts: matches with hosts config
 - check commands to match new paths/directories
-- run playbook
+-  run playbook
 
 
 -----------------

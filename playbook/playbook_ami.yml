@@ -1,0 +1,27 @@
+---
+
+- hosts: localhost
+  connection: local
+  gather_facts: False
+  # become: true
+
+  # vars:
+  #   key_name: Stefan_EC2
+  #   region: eu-west-1
+  #   image: ami-0347e7b47c4654570 # ami-0314707c427d935aa  # https://cloud-images.ubuntu.com/locator/ec2/
+  #   id: "StefanO.Ansible.SG"
+  #   sec_group: "{{ id }}-sec"
+
+  tasks:
+
+  - name: Register AMI
+    ec2_ami:
+      instance_id: i-05defbf594dde3f01
+      wait: yes
+      aws_access_key: "{{ec2_access_key}}"
+      aws_secret_key: "{{ec2_secret_key}}"
+      region: eu-west-1
+      name: Eng57.Stefan.Ansible.AMI
+      tags:
+        Name: Stefan.App.AMI
+        Service: TestService

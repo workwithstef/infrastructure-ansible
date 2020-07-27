@@ -9,9 +9,9 @@
   vars:
     key_name: StefanO_EC2
     region: eu-west-1
-    image: ami-0347e7b47c4654570 # https://cloud-images.ubuntu.com/locator/ec2/
-    id: "Stefan.Ansible.SG"
-    sec_group: "{{ id }}-sec"
+    image: ami-0c10f0faac62cce29  # https://cloud-images.ubuntu.com/locator/ec2/
+    # id: "Stefan.Ansible.SG"
+    # sec_group: "{{ id }}-sec"
 
   tasks:
 
@@ -44,37 +44,37 @@
       #     aws_access_key: "{{ec2_access_key}}"
       #     aws_secret_key: "{{ec2_secret_key}}"
 
-      - name: Create security group
-        ec2_group:
-          name: "{{ sec_group }}"
-          description: "Sec group for app {{ id }}"
-          # vpc_id: 12345
-          region: "{{ region }}"
-          aws_access_key: "{{ec2_access_key}}"
-          aws_secret_key: "{{ec2_secret_key}}"
-          rules:
-            - proto: tcp
-              ports:
-                - 22
-              cidr_ip: 150.143.48.83/32
-              rule_desc: allow MY IP on ssh port
-            - proto: tcp
-              ports:
-                - 80
-                - 443
-              cidr_ip: 0.0.0.0/0
-              rule_desc: allow all on http & https
-
-
-        register: result_sec_group
+      # - name: Create security group
+      #   ec2_group:
+      #     name: "{{ sec_group }}"
+      #     description: "Sec group for app {{ id }}"
+      #     # vpc_id: 12345
+      #     region: "{{ region }}"
+      #     aws_access_key: "{{ec2_access_key}}"
+      #     aws_secret_key: "{{ec2_secret_key}}"
+      #     rules:
+      #       - proto: tcp
+      #         ports:
+      #           - 22
+      #         cidr_ip: 150.143.48.83/32
+      #         rule_desc: allow MY IP on ssh port
+      #       - proto: tcp
+      #         ports:
+      #           - 80
+      #           - 443
+      #         cidr_ip: 0.0.0.0/0
+      #         rule_desc: allow all on http & https
+      #
+      #
+      #   register: result_sec_group
 
       - name: Provision instance(s)
         ec2:
           aws_access_key: "{{ec2_access_key}}"
           aws_secret_key: "{{ec2_secret_key}}"
           key_name: "{{ key_name }}"
-          id: "{{ id }}"
-          group_id: "{{ result_sec_group.group_id }}"
+          # id: "{{ id }}"
+          group_id: sg-0bd9285718af003c4
           image: "{{ image }}"
           instance_type: t2.micro
           region: "{{ region }}"
@@ -84,7 +84,7 @@
           # count_tag:
           #   Name: App
           instance_tags:
-            Name: StefanO.Ansible.2
+            Name: StefanO.Ansible.2.AMI.test
 
 
 
